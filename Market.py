@@ -20,6 +20,7 @@ external_stylesheets=[dbc.themes.LUX]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = 'Mission de Markéta' 
 app._favicon = ("question.ico")
+server = app.server
 
 done = base64.b64encode(open('done.png', 'rb').read()).decode('ascii')
 load = base64.b64encode(open('load.png', 'rb').read()).decode('ascii')
