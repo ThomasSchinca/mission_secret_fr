@@ -79,43 +79,9 @@ app.layout = html.Div([
             'height': '25px','width': '25px','margin-left':'12px'
         })],style={'display':'flex','flex-direction':'row','marginBottom':20,'marginTop':20}),
     html.Hr(style={'width': '70%','margin':'auto'}),
-    html.H5(children='Good luck !',style = {'textAlign': 'center','marginBottom':20,'marginTop':20}),
-     html.Div([dash_table.DataTable(editable=True,
-         style_header={
-        'backgroundColor': 'grey'
-    },
-    style_cell={
-                'textAlign': 'center',
-                'backgroundColor': [
-                    ['lightgrey' if (row // 3) % 2 == 0 and (col // 3) % 2 == 0
-                     else 'grey' if (row // 3) % 2 == 0 and (col // 3) % 2 != 0
-                     else 'grey' if (row // 3) % 2 != 0 and (col // 3) % 2 == 0
-                     else 'lightgrey'
-                     for col in range(9)]
-                    for row in range(9)
-                ]
-            },
-        data=sudoku_puzzle.to_dict('records'), columns=[{"name": i, "id": i} for i in sudoku_puzzle.columns])],
-         style={'width': '30%','margin':'auto'}),
-    html.Div([
-        "I3 * H5 * B9  = ",
-        dcc.Input(id='my-input', value='Maybe 8 ?', type='text')
-    ],style={'margin-left':'550px','marginTop':20}),
-    html.Div(id='print',style={'margin-left':'550px'})
+    html.H5(children='Next one on the 7th August',style = {'textAlign': 'center','marginBottom':40,'marginTop':20})
+    
 ])
-
-
-@app.callback(Output('print', 'children'),
-              Input('my-input', 'value'))
-
-def update_output(input_1):
-    if input_1 == '252':
-        ret = dcc.Markdown('Congrats. You can pass to the next [test](https://docs.google.com/forms/d/e/1FAIpQLSeGouQx-YEYVJJ1k7WAhDldYb9aqxMGzvi11EjPB0ywVvaaaw/viewform?usp=sf_link)')
-    elif input_1 == 'Maybe 8 ?' or input_1 == '' :
-        ret= '   '
-    else:    
-        ret = 'Nope, it is a mistake.'
-    return ret
 
 if __name__ == '__main__':
     app.run(debug=True)
