@@ -69,7 +69,7 @@ app.layout = html.Div([
         style={'width': '100%','margin-left':'15px','margin-right':'15px'},
     )]),
     html.Hr(style={'width': '70%','margin':'auto'}),
-    html.Div([dcc.Markdown('Test 1',style={'margin-left':'350px'}),html.Img(src='data:image/png;base64,{}'.format(load),style={
+    html.Div([dcc.Markdown('Test 1',style={'margin-left':'350px'}),html.Img(src='data:image/png;base64,{}'.format(done),style={
             'height': '25px','width': '25px','margin-left':'12px'
         }),dcc.Markdown('Test 2',style={'margin-left':'120px'}),html.Img(src='data:image/png;base64,{}'.format(ndone),style={
             'height': '25px','width': '25px','margin-left':'12px'
