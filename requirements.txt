@@ -1,4 +1,4 @@
-dash==2.7.0
+dash==2.9.0
 dash_bootstrap_components==1.4.0
 dash_cytoscape==0.2.0
 numpy==1.22.3

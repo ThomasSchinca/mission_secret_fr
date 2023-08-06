@@ -9,12 +9,13 @@ import base64
 import io
 import numpy as np
 import dash
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Input, Output, State,ALL
 from dash import dcc, html, dash_table
 from dash.exceptions import PreventUpdate
 import dash_bootstrap_components as dbc
 import pandas as pd
 import plotly.express as px
+import random
 
 external_stylesheets=[dbc.themes.LUX]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
@@ -26,44 +27,19 @@ done = base64.b64encode(open('done.png', 'rb').read()).decode('ascii')
 load = base64.b64encode(open('load.png', 'rb').read()).decode('ascii')
 ndone = base64.b64encode(open('ndone.png', 'rb').read()).decode('ascii')
 
-sudoku_puzzle = pd.DataFrame(np.array([
-    [5, 3, 0, 0, 7, 0, 0, 0, 0],
-    [6, 0, 0, 1, 9, 5, 0, 0, 0],
-    [0, 9, 8, 0, 0, 0, 0, 6, 0],
-    [8, 0, 0, 0, 6, 0, 0, 0, 3],
-    [4, 0, 0, 8, 0, 3, 0, 0, 1],
-    [7, 0, 0, 0, 2, 0, 0, 0, 6],
-    [0, 6, 0, 0, 0, 0, 2, 8, 0],
-    [0, 0, 0, 4, 1, 9, 0, 0, 5],
-    [0, 0, 0, 0, 8, 0, 0, 7, 9]
-]))
-sudoku_puzzle = sudoku_puzzle.reset_index()
-sudoku_puzzle.iloc[:,0]=sudoku_puzzle.iloc[:,0]+1
-sudoku_puzzle[sudoku_puzzle==0]=float('NaN')
-sudoku_results = pd.DataFrame(np.array([
-    [5, 3, 4, 6, 7, 8, 9, 1, 2],
-    [6, 7, 2, 1, 9, 5, 3, 4, 8],
-    [1, 9, 8, 3, 4, 2, 5, 6, 7],
-    [8, 5, 9, 7, 6, 1, 4, 2, 3],
-    [4, 2, 6, 8, 5, 3, 7, 9, 1],
-    [7, 1, 3, 9, 2, 4, 8, 5, 6],
-    [9, 6, 1, 5, 3, 7, 2, 8, 4],
-    [2, 8, 7, 4, 1, 9, 6, 3, 5],
-    [3, 4, 5, 2, 8, 6, 1, 7, 9]
-]))
-
-sudoku_puzzle.columns=[' ','A','B','C','D','E','F','G','H','I']
+num=[1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13,14,14,15,15,16,16]
+random.shuffle(num)
 
 app.layout = html.Div([
     
     html.H1(children='Bonjour Markéta',style = {'textAlign': 'center','marginBottom':40,'marginTop':20}),
     html.Div([dcc.Markdown('''
         Vážená Markéto,
-        V tomto srpnovém měsíci má francouzská vláda tu čest svěřit vám misi nesmírné důležitosti. Vaše pověst jako zkušené a oddané špionky nás přesvědčila, že jste ideální osobou pro zvládnutí této klíčové úlohy.
-        Vaše tajná mise, pokud ji přijmete, proběhne po celý srpen a bude obsahovat čtyři náročné testy, jeden každý týden. Každý test bude zaměřen na hodnocení vašich mimořádných vlastností jako špionky a vaší schopnosti přizpůsobit se nejnáročnějším situacím.
-        Vězte, že úspěch v každém testu bude bohatě odměněn, a na konci této mise na vás čeká zvláštní překvapení. Jsme přesvědčeni, že se této úlohy zhostíte s patřičnou hrdostí a váš oddaný přístup k povinnosti přispěje k ochraně naší země.
-        Hodně štěstí, Markéto, ať vás tato mise nechá zazářit jako hvězda na noční obloze!
-        Váš vládní kontakt,
+        Dobrý špion by měl mít skvělou paměť. Aby ses dostala/o přes další test,
+        potřebuješ vyhrát hru "50 odstínů Manu". Musíš najít páry stejné barvy Manu. 
+        Pokud nenajdeš pár, vybrané karty se ihned schovají. Někdy se hra trochu sekne,
+        takže neváhej/a klikat několikrát pro výběr karty.
+        Hodně štěstí!
         Kapitán Dupont.
         ''',
         style={'width': '100%','margin-left':'15px','margin-right':'15px'},
@@ -71,7 +47,7 @@ app.layout = html.Div([
     html.Hr(style={'width': '70%','margin':'auto'}),
     html.Div([dcc.Markdown('Test 1',style={'margin-left':'350px'}),html.Img(src='data:image/png;base64,{}'.format(done),style={
             'height': '25px','width': '25px','margin-left':'12px'
-        }),dcc.Markdown('Test 2',style={'margin-left':'120px'}),html.Img(src='data:image/png;base64,{}'.format(ndone),style={
+        }),dcc.Markdown('Test 2',style={'margin-left':'120px'}),html.Img(src='data:image/png;base64,{}'.format(load),style={
             'height': '25px','width': '25px','margin-left':'12px'
         }),dcc.Markdown('Test 3',style={'margin-left':'120px'}),html.Img(src='data:image/png;base64,{}'.format(ndone),style={
             'height': '25px','width': '25px','margin-left':'12px'
@@ -79,9 +55,66 @@ app.layout = html.Div([
             'height': '25px','width': '25px','margin-left':'12px'
         })],style={'display':'flex','flex-direction':'row','marginBottom':20,'marginTop':20}),
     html.Hr(style={'width': '70%','margin':'auto'}),
-    html.H5(children='Next one on the 7th August',style = {'textAlign': 'center','marginBottom':40,'marginTop':20})
-    
+    dcc.Store(id='memory'),
+    dcc.Store(id='memory_found'),
+    html.Div([
+        html.Button('', id={'type': 'my-button', 'index': i},className='custom-button-clicked')
+        for i in range(32)
+    ], style={'display': 'grid', 'grid-template-columns': 'repeat(8, 4cm)', 'gap': '10px','margin-left':'75px'}),
+    html.Hr(style={'width': '70%','margin':'auto','marginBottom':20,'marginTop':20}),
+    html.Div(id='out',style={'textAlign': 'center'})
 ])
+    
 
+@app.callback(
+    Output({'type': 'my-button', 'index': ALL}, 'className'),
+    Output('memory', 'data'),
+    Output('memory_found', 'data'),
+    Output('out','children'),
+    Input({'type': 'my-button', 'index':ALL}, 'n_clicks'),
+    State({'type': 'my-button', 'index': ALL}, 'className'),
+    State('memory', 'data'),
+    State('memory_found', 'data'),
+    prevent_initial_call=True
+)
+
+def update_button_class(n_clicks, current_class,memory,memory_found):
+    ctx = dash.callback_context
+    button_index = ctx.triggered[0]['prop_id'][9:].split(',')[0]
+    if int(button_index)==memory:
+        raise PreventUpdate
+    if memory_found is not None:
+        if num[int(button_index)] in memory_found:
+            raise PreventUpdate
+    if memory == None:
+        if n_clicks[int(button_index)] is not None and n_clicks[int(button_index)] % 2 == 1:
+            current_class[int(button_index)]='custom-button'+str(num[int(button_index)])
+            memory=int(button_index)
+        else:
+            current_class[int(button_index)]= 'custom-button-clicked'
+    else:
+        if num[int(button_index)] == num[memory]:
+            current_class[int(button_index)]='custom-button'+str(num[int(button_index)])
+            if memory_found is not None:  
+                memory_found.append(num[int(button_index)])
+            else:
+                memory_found=[num[int(button_index)]]
+            memory = None
+        else:
+            memory = None
+            if memory_found is not None:
+                for i in range(32):
+                    if num[i] in memory_found:
+                        current_class[i]='custom-button'+str(num[i])
+                    else:
+                        current_class[i]= 'custom-button-clicked'
+            else:
+                for i in range(32):
+                    current_class[i]= 'custom-button-clicked'
+    out=' '
+    if memory_found is not None:                    
+        if len(memory_found)==16:
+            out=dcc.Markdown('''# Good job ! You can pass to the next [step](https://docs.google.com/forms/d/e/1FAIpQLSdufZemZL1iB3Avw9u2cZ7BqHaxzQakxHn9lPwuH8p-eFVu0A/viewform?usp=sf_link)''')
+    return current_class,memory,memory_found,out
 if __name__ == '__main__':
     app.run(debug=True)
