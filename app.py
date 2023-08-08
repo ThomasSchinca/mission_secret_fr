@@ -47,7 +47,7 @@ app.layout = html.Div([
     html.Hr(style={'width': '70%','margin':'auto'}),
     html.Div([dcc.Markdown('Test 1',style={'margin-left':'350px'}),html.Img(src='data:image/png;base64,{}'.format(done),style={
             'height': '25px','width': '25px','margin-left':'12px'
-        }),dcc.Markdown('Test 2',style={'margin-left':'120px'}),html.Img(src='data:image/png;base64,{}'.format(load),style={
+        }),dcc.Markdown('Test 2',style={'margin-left':'120px'}),html.Img(src='data:image/png;base64,{}'.format(done),style={
             'height': '25px','width': '25px','margin-left':'12px'
         }),dcc.Markdown('Test 3',style={'margin-left':'120px'}),html.Img(src='data:image/png;base64,{}'.format(ndone),style={
             'height': '25px','width': '25px','margin-left':'12px'
@@ -114,7 +114,7 @@ def update_button_class(n_clicks, current_class,memory,memory_found):
     out=' '
     if memory_found is not None:                    
         if len(memory_found)==16:
-            out=dcc.Markdown('''# Good job ! You can pass to the next [step](https://docs.google.com/forms/d/e/1FAIpQLSdufZemZL1iB3Avw9u2cZ7BqHaxzQakxHn9lPwuH8p-eFVu0A/viewform?usp=sf_link)''')
+            out=dcc.Markdown('''# Good job !''')
     return current_class,memory,memory_found,out
 if __name__ == '__main__':
     app.run(debug=True)
