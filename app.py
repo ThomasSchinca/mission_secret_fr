@@ -110,7 +110,7 @@ def update_game_state(input_letter, current_word_display, current_attempts_left,
             ]
             
             if "_" not in word_display:
-                return word_display, current_attempts_left, "Congratulations! [You've won!](https://docs.google.com/forms/d/e/1FAIpQLSfp5Ja6PFaOH8SjWd_NRtwf_F4r-i7lKjYswCfUkkoTGSD3lg/viewform?usp=sf_link) "
+                return word_display, current_attempts_left, dcc.Markdown("Congratulations! [You've won!](https://docs.google.com/forms/d/e/1FAIpQLSfp5Ja6PFaOH8SjWd_NRtwf_F4r-i7lKjYswCfUkkoTGSD3lg/viewform?usp=sf_link)")
             current_game_status=''
         else:
             attempts_left -= 1
