@@ -17,16 +17,6 @@ import pandas as pd
 import plotly.express as px
 import random
 
-external_stylesheets=[dbc.themes.LUX]
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
-app.title = 'Mission de Markéta' 
-app._favicon = ("question.ico")
-server = app.server
-
-done = base64.b64encode(open('done.png', 'rb').read()).decode('ascii')
-load = base64.b64encode(open('load.png', 'rb').read()).decode('ascii')
-ndone = base64.b64encode(open('ndone.png', 'rb').read()).decode('ascii')
-
 # List of words for the Hangman game
 words = [
     "paris", "versailles", "marseille", "aixenprovence", "toulon","grenoble", "clermontferrand", "saintetienne", "chambery",
@@ -41,8 +31,18 @@ def setup_game():
     attempts_left = 5
     return word_to_guess, guessed_letters, attempts_left
 
-# Initial game state
 word_to_guess, guessed_letters, attempts_left = setup_game()
+
+
+external_stylesheets=[dbc.themes.LUX]
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
+app.title = 'Mission de Markéta' 
+app._favicon = ("question.ico")
+server = app.server
+
+done = base64.b64encode(open('done.png', 'rb').read()).decode('ascii')
+load = base64.b64encode(open('load.png', 'rb').read()).decode('ascii')
+ndone = base64.b64encode(open('ndone.png', 'rb').read()).decode('ascii')
 
 app.layout = html.Div([
     
@@ -77,6 +77,8 @@ app.layout = html.Div([
             html.Div(id="game-status", children="", style={"fontSize": "24px", "marginTop": "20px"}),
         ])
 ])
+            
+
 
 @app.callback(
     Output("word-display", "children"),
@@ -90,6 +92,10 @@ app.layout = html.Div([
 )
 def update_game_state(input_letter, current_word_display, current_attempts_left, current_game_status, n_clicks):
     global word_to_guess, guessed_letters, attempts_left
+    
+    if n_clicks==1:
+        guessed_letters = set()
+        attempts_left = 5
     
     if current_game_status == "Game Over":
         return current_word_display, f"Attempts Left: {attempts_left}", "Game Over"
