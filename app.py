@@ -17,23 +17,6 @@ import pandas as pd
 import plotly.express as px
 import random
 
-# List of words for the Hangman game
-words = [
-    "paris", "versailles", "marseille", "aixenprovence", "toulon","grenoble", "clermontferrand", "saintetienne", "chambery",
-    "toulouse", "montpellier", "perpignan", "carcassonne",
-    "amiens", "roubaix", "tourcoing","nantes", "saintnazaire", "cholet",
-    "bordeaux", "limoges", "poitiers", "chateauroux"
-]
-# Initial setup
-def setup_game():
-    word_to_guess = random.choice(words)
-    guessed_letters = set()
-    attempts_left = 5
-    return word_to_guess, guessed_letters, attempts_left
-
-word_to_guess, guessed_letters, attempts_left = setup_game()
-
-
 external_stylesheets=[dbc.themes.LUX]
 app = dash.Dash(__name__, external_stylesheets=external_stylesheets)
 app.title = 'Mission de Markéta' 
